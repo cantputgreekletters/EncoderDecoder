@@ -1,3 +1,5 @@
+#Imports
+import tkinter as tk
 #constants
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 letters = tuple(letters + letters.lower()) # = 54
@@ -80,6 +82,60 @@ class Decoder(Coder):
         self._SerializeKey()
         self._DefineGlossary()
         return self.__Decrypt()
+    
+class Window:
+    def __init__(self) -> None:
+        self.window = tk.Tk()
+        self.window.geometry('600x600')
+
+    def open(self):
+        self.contents()
+        self.window.mainloop()
+        return
+class EncodeWindow(Window):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def contents(self):
+        tk.Entry(master=self.window).pack()
+        tk.Entry(master=self.window).pack()
+
+class DecodeWindow(Window):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def contents(self):
+        pass
+class MainWindow(Window):
+    def __init__(self) -> None:
+        super().__init__()
+        self.__open_window = False
+
+    def __EncodeOpen(self):
+        print(self.__open_window)
+        if self.__open_window == False:
+            self.__open_window = True
+            window = EncodeWindow()
+            window.open()
+
+            self.__open_window = False
+        print('test')
+            
+
+    def __DecodeOpen(self):
+        if self.__open_window == False:
+            self.__open_window = True
+            window = DecodeWindow()
+            window.open()
+            self.__open_window = False
+
+    def contents(self):
+        EncodeButton = tk.Button(master=self.window,text="Encode",command=self.__EncodeOpen)
+        EncodeButton.pack()
+        DecodeButton = tk.Button(master=self.window,text="Decode",command=self.__DecodeOpen)
+        DecodeButton.pack()
+        tk.Button(master=self.window,text='Exit',command=self.window.destroy).pack()
+        
 # Functions
 def Condition(inp):
     if not inp: return False
@@ -98,6 +154,11 @@ def GetKey():
 if __name__ == '__main__':
     encoder = Encoder()
     decoder = Decoder()
+    MW = MainWindow()
+    
+    MW.open()
+
+#testing
     key = GetKey()
     text = str(input("Give text\n"))
     encoded = encoder.Encode(key,text)
@@ -105,5 +166,3 @@ if __name__ == '__main__':
     decoded = decoder.Decode(key,encoded)
 
     print(f"Encoded: {encoded}\nDecoded: {decoded}")
-
-#testing
